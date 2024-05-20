@@ -3,13 +3,18 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/HsiaoCz/go-react-poj/storage"
 	"github.com/gofiber/fiber/v2"
 )
 
-type UserHandler struct{}
+type UserHandler struct {
+	store *storage.Store
+}
 
-func NewUserHandler() *UserHandler {
-	return &UserHandler{}
+func NewUserHandler(store *storage.Store) *UserHandler {
+	return &UserHandler{
+		store: store,
+	}
 }
 
 func (u *UserHandler) HandleUserSignup(c *fiber.Ctx) error {

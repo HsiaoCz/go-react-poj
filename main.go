@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"log/slog"
 	"os"
@@ -9,8 +10,11 @@ import (
 
 	"github.com/HsiaoCz/go-react-poj/handlers"
 	"github.com/HsiaoCz/go-react-poj/settings"
+	"github.com/HsiaoCz/go-react-poj/storage"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func main() {
@@ -21,12 +25,20 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(settings.GetMongoUri("MONGOURI")))
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	logger := slog.New(slog.NewJSONHandler(file, &slog.HandlerOptions{}))
 	slog.SetDefault(logger)
 
 	var (
-		userHandler = handlers.NewUserHandler()
-		port        = settings.GetPort("PORT")
+		mongoStorage = storage.NewMongoStorage(client, settings.GetDBname("DBNAME"), settings.GetUserColl("USERCOLL"))
+		store        = &storage.Store{User: mongoStorage}
+		userHandler  = handlers.NewUserHandler(store)
+		port         = settings.GetPort("PORT")
 	)
 
 	app := fiber.New()
