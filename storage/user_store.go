@@ -10,18 +10,18 @@ type UserStorer interface {
 	CreateUser(context.Context) error
 }
 
-type MongoStorage struct {
+type MongoUserStore struct {
 	client *mongo.Client
 	coll   *mongo.Collection
 }
 
-func NewMongoStorage(client *mongo.Client, dbname string, collname string) *MongoStorage {
-	return &MongoStorage{
+func NewMongoUserStore(client *mongo.Client, dbname string, collname string) *MongoUserStore {
+	return &MongoUserStore{
 		client: client,
 		coll:   client.Database(dbname).Collection(collname),
 	}
 }
 
-func (m *MongoStorage) CreateUser(context.Context) error {
+func (m *MongoUserStore) CreateUser(context.Context) error {
 	return nil
 }

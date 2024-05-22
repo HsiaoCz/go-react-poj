@@ -2,34 +2,42 @@ package settings
 
 import "os"
 
-func GetPort(key string) string {
-	port := os.Getenv(key)
+func GetPort() string {
+	port := os.Getenv("PORT")
 	if port == "" {
 		port = ":3001"
 	}
 	return port
 }
 
-func GetMongoUri(key string) string {
-	mongoUri := os.Getenv(key)
+func GetMongoUri() string {
+	mongoUri := os.Getenv("MONGOURI")
 	if mongoUri == "" {
 		mongoUri = "mongodb://localhost:27017"
 	}
 	return mongoUri
 }
 
-func GetDBname(key string) string {
-	dbname := os.Getenv(key)
+func GetDBname() string {
+	dbname := os.Getenv("DBNAME")
 	if dbname == "" {
 		dbname = "gorct"
 	}
 	return dbname
 }
 
-func GetUserColl(key string) string {
-	userColl := os.Getenv(key)
+func GetUserColl() string {
+	userColl := os.Getenv("USERCOLL")
 	if userColl == "" {
 		userColl = "user"
 	}
 	return userColl
+}
+
+func GetTodoColl() string {
+	todoColl := os.Getenv("TODOCOLL")
+	if todoColl == "" {
+		todoColl = "todo"
+	}
+	return todoColl
 }

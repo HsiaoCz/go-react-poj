@@ -26,7 +26,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(settings.GetMongoUri("MONGOURI")))
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(settings.GetMongoUri()))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,15 +35,18 @@ func main() {
 	slog.SetDefault(logger)
 
 	var (
-		mongoStorage = storage.NewMongoStorage(client, settings.GetDBname("DBNAME"), settings.GetUserColl("USERCOLL"))
-		store        = &storage.Store{User: mongoStorage}
-		userHandler  = handlers.NewUserHandler(store)
-		port         = settings.GetPort("PORT")
+		mongoUserStore = storage.NewMongoUserStore(client, settings.GetDBname(), settings.GetUserColl())
+		mongoTodoStore = storage.NewMongoTodoStore(client, settings.GetDBname(), settings.GetTodoColl())
+		store          = &storage.Store{User: mongoUserStore, Todo: mongoTodoStore}
+		userHandler    = handlers.NewUserHandler(store)
+		todoHandler    = handlers.NewTodoHandler(store)
+		port           = settings.GetPort()
 	)
 
 	app := fiber.New()
 
 	app.Get("/user/signup", userHandler.HandleUserSignup)
+	app.Get("/todo/{id}", todoHandler.HandleGetTodoByID)
 
 	go func() {
 		slog.Info("the server is running", "port", port)

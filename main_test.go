@@ -10,7 +10,7 @@ import (
 )
 
 func TestMongoConnect(t *testing.T) {
-	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(settings.GetMongoUri("MONGOURI")))
+	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(settings.GetMongoUri()))
 	if err != nil {
 		t.Fatal(err)
 	}
