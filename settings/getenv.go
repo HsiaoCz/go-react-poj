@@ -13,7 +13,7 @@ func GetPort() string {
 func GetMongoUri() string {
 	mongoUri := os.Getenv("MONGOURI")
 	if mongoUri == "" {
-		mongoUri = "mongodb://localhost:27017"
+		mongoUri = "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.5"
 	}
 	return mongoUri
 }

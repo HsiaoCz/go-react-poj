@@ -45,7 +45,7 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/user/signup", userHandler.HandleUserSignup)
+	app.Post("/user/signup", userHandler.HandleUserSignup)
 	app.Get("/todo/{id}", todoHandler.HandleGetTodoByID)
 
 	go func() {
